@@ -107,3 +107,15 @@ Floor 2
         Light 2 : OFF
         AC : ON
 ```
+
+## Potential Objects Needed
+
+### Models
+Hotel
+Sensor ?
+
+### Controllers
+SensorsController
+
+### View
+SimplePrinter
