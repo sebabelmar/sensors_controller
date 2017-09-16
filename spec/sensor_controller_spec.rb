@@ -1,5 +1,4 @@
-require 'rspec'
-require_relative "../app/SensorsController"
+require_relative "spec_helper"
 
 describe SensorController do
   let(:sensor_controller) { SensorController.new }
