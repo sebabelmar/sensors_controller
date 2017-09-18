@@ -1,29 +1,52 @@
+=begin
+This class is ment to be a simple building configuration
+
+Properties Types:
+  @category: String
+  @floors: floor[]
+    floor = {number:<1>, qty_main_corridor:<1>, qty_sub_corr:<1>}
+  @appliances: appliance[]
+    appliance = {type: <light, ac>, location: <main, sub>, qty_per_location: <=1>, energy_consuption<10>}
+  @sensors = sensor[]
+    sensor = {type: <motion>, location: <main, sub>, qty_per_location: <=1>}
+  @restriction = Hash
+    {level: floor, :main_times: , :sub_times}
+=end
+
+
 class Building
+  attr_reader :restrictions
+  attr_accessor :restriction
+
   def initialize(args={})
-
-    if ([args[:floor_qty], args[:main_corridors_per_floor], args[:sub_corridors_per_floor]].uniq.include?(nil))
-      raise(ArgumentError, "You must include all of the following arguments in numeric values and 0 if n.a: floor_qty, main_corridors_per_floor, sub_corridors_per_floor.")
+    # Verify objects keys and values...
+    if (false)
+      raise(ArgumentError, "some error")
     end
-
-    args.reject { |k, v| [:category].include? k }.each do |k, v|
-      raise(ArgumentError, "#{k} is not  numeric value.") unless v.class == Fixnum
-    end
-
 
     # Building Classification
-    @category                   = args[:category] || 'hotel'
+    @category = args[:category] || 'hotel'
 
     # Structure
-    @number_of_floors           = args[:floor_qty]
-    @number_of_floors           = args[:floor_qty]
-    @main_corridors_per_floor   = args[:main_corridors_per_floor]
-    @sub_corridors_per_floor    = args[:sub_corridors_per_floor]
+    @floors = args[:floors]
 
-    # Apliance per corridor
-    @lights_per_main_corridors  = args[:lights_per_main_corridors]  || 1
-    @lights_per_sub_corridors   = args[:lights_per_sub_corridors]   || 1
-    @ac_per_main_corridors      = args[:ac_per_main_corridors]      || 1
-    @ac_per_sub_corridors       = args[:ac_per_sub_corridors]       || 1
-
+    # Features
+    @appliances = args[:appliances]
+    @sensors = args[:sensors]
+    @restriction = args[:restriction]
+    @restrictions = energy_restrictions
   end
+
+  private
+    # Restriction flex draft (energy_restrictions)
+    # def restriction=(new_restriction);end
+
+    # Creates hash with restriciton per floor
+    def energy_restrictions
+      @floors.each_with_object({}) do |floor, restrictions|
+        restrictions[floor[:number]] =
+          floor[:qty_main_corridor] * @restriction[:main_times] +
+          floor[:qty_sub_corridor] * @restriction[:sub_times]
+      end
+    end
 end
