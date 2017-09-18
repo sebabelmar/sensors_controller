@@ -12,9 +12,12 @@ class Sensor
     @last_armed = args[:last_armed]
     @observer   = args[:observer]
 
+    # Observer is added on initialization (SensorController)
     add_observer(@observer)
   end
 
+
+  # Observer is notified on changes (SensorController)
   def armed=(armed_update)
     changed
     @armed = armed_update
