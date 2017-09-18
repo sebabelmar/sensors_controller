@@ -16,7 +16,7 @@ be switched ON between 6PM to 6AM (Night time slot)
 * When there is no motion for more than a minute the sub corridor lights should be
 switched OFF
 * The total power consumption of all the AC's and lights combined should not exceed
-(Number of Main corridors * 15) + (Number of sub corridors * 10) units of per floor. Sub corridor AC could be switched OFF to ensure that the power consumption is not more than the specified maximum value
+(Number of Main corridors x 15) + (Number of sub corridors x 10) units of per floor. Sub corridor AC could be switched OFF to ensure that the power consumption is not more than the specified maximum value
 * When the power consumption goes below the specified maximum value the AC's that were switched OFF previously must be switched ON
 
 ## Needs
