@@ -2,16 +2,17 @@ require "observer"
 
 class SensorController
   include Observable
-  attr_reader :status, :state
+  attr_reader :on, :activated, :test_var
 
-  def initialize(observer, building)
+  def initialize(args)
+    @test_var       = nil
     @on             = false
     @activated      = false
-    @building       = building
-    @sensor         = sensors
-    @appliance      = building
+    @building       = args[:building]
+    @sensor         = args[:sensor]
+    @appliance      = args[:appliance]
 
-    add_observer(@appliances)
+    add_observer(@appliance)
   end
 
   # Turn on:
@@ -19,8 +20,10 @@ class SensorController
   #   => Create all apps per floor as off
   #   => Sets levels of energy in use somewhere
   def turn_on
-    @sensor.on
-    @appliance.on
+    @sensor.turn_on
+    @appliance.turn_on
+
+    true
   end
 
   # Turn to activated:
@@ -42,7 +45,9 @@ class SensorController
     # 2- Updates the Appliance tree (representation of the apliances)
     # 3- Send new Appliance Tree to Appliance via messages
     puts "Updated from a sensor..."
-    self.state = state << sensor.id
+    # self.state = state << sensor.id
+    # print_this
+    @test_var = true
   end
 
   # Emits messages to appliances
