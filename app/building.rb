@@ -16,7 +16,7 @@ Properties Types:
 
 class Building
   attr_reader :restrictions
-  attr_accessor :restriction
+  attr_accessor :restriction, :floors, :sensors, :restrictions
 
   def initialize(args={})
     # Verify objects keys and values...
@@ -43,10 +43,18 @@ class Building
 
     # Creates hash with restriciton per floor
     def energy_restrictions
-      @floors.each_with_object({}) do |floor, restrictions|
-        restrictions[floor[:number]] =
-          floor[:qty_main_corridor] * @restriction[:main_times] +
-          floor[:qty_sub_corridor] * @restriction[:sub_times]
+      @floors.each_with_object({}) do |floor, restrictions|          
+          limit = 0
+
+          floor[:main_corridors].each do |main|
+            limit += @restriction[:main_times]
+
+            main[:sub_corridors].each do |sub|
+              limit += @restriction[:sub_times]
+            end
+          end
+
+          restrictions[floor[:number]] = limit
       end
     end
 end
