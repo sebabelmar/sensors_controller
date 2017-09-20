@@ -3,6 +3,27 @@ require "observer"
 class Sensor
   include Observable
 
+  attr_reader :id, :armed, :floor_number, :location
+
+  def initialize(args)
+    @id           = args[:id]
+    @floor_number = args[:floor_number]
+    @location     = args[:location]
+    @armed        = false
+
+    # Observer is added on initialization (SensorController)
+    add_observer(@@controller)
+  end
+
+  # Observer is notified on changes (SensorController)
+  def armed=(armed_update)
+    changed
+    @armed      = armed_update
+    @last_armed = Time.now
+    notify_observers(self)
+  end
+
+
   # ####### Class Methods ##########
   @@controller  = nil
   @@sensors     = {}
@@ -46,29 +67,8 @@ class Sensor
       })
   end
 
-  def self.find; end
-  def self.update; end
-  def self.delete; end
-  def save; end
-
-  attr_reader :id, :armed, :floor_number, :location
-
-  def initialize(args)
-    @id           = args[:id]
-    @floor_number = args[:floor_number]
-    @location     = args[:location]
-    @armed        = false
-
-    # Observer is added on initialization (SensorController)
-    add_observer(@@controller)
-  end
-
-  # ######## Instance Methods ##########
-  # Observer is notified on changes (SensorController)
-  def armed=(armed_update)
-    changed
-    @armed      = armed_update
-    @last_armed = Time.now
-    notify_observers(self)
-  end
+  # def self.find; end
+  # def self.update; end
+  # def self.delete; end
+  # def save; end
 end
