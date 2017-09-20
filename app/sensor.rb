@@ -1,22 +1,12 @@
 require "observer"
 
 class Sensor
-  @@on          = false
+  include Observable
+
+  # ####### Class Methods ##########
   @@controller  = nil
   @@sensors     = {}
 
-  include Observable
-  attr_reader :id, :armed
-
-  def initialize(id)
-    @id         = id
-    @armed      = false
-
-    # Observer is added on initialization (SensorController)
-    add_observer(@@controller)
-  end
-
-  # ####### Class Methods ##########
   def self.turn_on(building, controller)
     @@building   = building
     @@controller = controller
@@ -24,7 +14,7 @@ class Sensor
     @@on = true
   end
 
-  def self.sensors
+  def self.all
     @@sensors
   end
 
@@ -37,18 +27,18 @@ class Sensor
   def self.factory
 
     # Assuming 1 sensor per location
-      @@building.floors.each do |floor|
-        floor_number = floor[:number]
+    @@building.floors_config.each do |floor|
+      floor_number = floor[:number]
 
-        floor[:main_corridors].each do |main|
-          main_number = main[:number]
-          self.create(floor_number, main_number)
+      floor[:main_corridors].each do |main|
+        main_number = main[:number]
+        self.create(floor_number, main_number)
 
-          main[:sub_corridors].each do |sub|
-            self.create(floor_number, main_number, sub[:number])
-          end
+        main[:sub_corridors].each do |sub|
+          self.create(floor_number, main_number, sub[:number])
         end
       end
+    end
   end
 
   # CRUD move to module if possible
@@ -63,6 +53,16 @@ class Sensor
   def self.update; end
   def self.delete; end
   def save; end
+
+  attr_reader :id, :armed
+
+  def initialize(id)
+    @id         = id
+    @armed      = false
+
+    # Observer is added on initialization (SensorController)
+    add_observer(@@controller)
+  end
 
   # ######## Instance Methods ##########
   # Observer is notified on changes (SensorController)
