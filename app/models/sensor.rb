@@ -27,21 +27,23 @@ class Sensor
 
       floor[:main_corridors].each do |main|
         main_number = main[:number]
-        self.create(floor_number, main_number)
+        self.create('main', floor_number, main_number)
 
         main[:sub_corridors].each do |sub|
-          self.create(floor_number, main_number, sub[:number])
+          self.create('sub', floor_number, main_number, sub[:number])
         end
       end
     end
   end
 
   # CRUD move to module if possible
-  def self.create(floor_number, main_number, sub_number=0)
+  def self.create(location, floor_number, main_number, sub_number=0)
     # Add validation like unique ids.
 
     id = "#{floor_number}_#{main_number}_#{sub_number}"
-    @@sensors[id] = Sensor.new(id)
+    @@sensors[id] = Sensor.new({
+      id: id, floor_number: floor_number, location: location
+      })
   end
 
   def self.find; end
@@ -49,11 +51,13 @@ class Sensor
   def self.delete; end
   def save; end
 
-  attr_reader :id, :armed
+  attr_reader :id, :armed, :floor_number, :location
 
-  def initialize(id)
-    @id         = id
-    @armed      = false
+  def initialize(args)
+    @id           = args[:id]
+    @floor_number = args[:floor_number]
+    @location     = args[:location]
+    @armed        = false
 
     # Observer is added on initialization (SensorController)
     add_observer(@@controller)
