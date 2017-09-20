@@ -11,15 +11,10 @@ class Sensor
     @@building   = building
     @@controller = controller
     factory
-    @@on = true
   end
 
   def self.all
     @@sensors
-  end
-
-  def self.on
-    @@on = true
   end
 
   # This can be optimize with a different query to floor/sensors
