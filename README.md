@@ -233,38 +233,54 @@ Appliance.all =>
     @type="light">
  }
 ```
-
+Sensor.all =>
 ```ruby
-{
-  "1_1_0"=>
-  #<Sensor:0x007feaababe440
+{"1_1_0"=>
+  #<Sensor:0x007ff21a461270
    @armed=false,
+   @floor_number=1,
    @id="1_1_0",
-   @observer_peers= {#<SensorController:0x007feaabac5420>}>
+   @location="main",
+   @observer_peers=
+    {#<OperationsController:0x007ff21a4688b8}>,
  "1_1_1"=>
-  #<Sensor:0x007feaababe300
+  #<Sensor:0x007ff21a461090
    @armed=false,
+   @floor_number=1,
    @id="1_1_1",
-   @observer_peers= {#<SensorController:0x007feaabac5420>}>
+   @location="sub",
+   @observer_peers=
+    {#<OperationsController:0x007ff21a4688b8}>,
  "1_1_2"=>
-  #<Sensor:0x007feaababe1c0
+  #<Sensor:0x007ff21a460a28
    @armed=false,
+   @floor_number=1,
    @id="1_1_2",
-   @observer_peers= {#<SensorController:0x007feaabac5420>}>
+   @location="sub",
+   @observer_peers=
+    {#<OperationsController:0x007ff21a4688b8}>,
  "2_1_0"=>
-  #<Sensor:0x007feaababe0a8
+  #<Sensor:0x007ff21a460870
    @armed=false,
+   @floor_number=2,
    @id="2_1_0",
-   @observer_peers= {#<SensorController:0x007feaabac5420>}>
+   @location="main",
+   @observer_peers=
+    {#<OperationsController:0x007ff21a4688b8}>,
  "2_1_1"=>
-  #<Sensor:0x007feaababdf68
+  #<Sensor:0x007ff21a4606e0
    @armed=false,
+   @floor_number=2,
    @id="2_1_1",
-   @observer_peers= {#<SensorController:0x007feaabac5420>}>
+   @location="sub",
+   @observer_peers=
+    {#<OperationsController:0x007ff21a4688b8}>,
  "2_1_2"=>
-  #<Sensor:0x007feaababde28
+  #<Sensor:0x007ff21a460578
    @armed=false,
+   @floor_number=2,
    @id="2_1_2",
-   @observer_peers= {#<SensorController:0x007feaabac5420}>
-}
+   @location="sub",
+   @observer_peers=
+    {#<OperationsController:0x007ff21a4688b8}>,
 ```
