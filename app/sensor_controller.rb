@@ -2,12 +2,11 @@ require "observer"
 
 class SensorController
   include Observable
-  attr_reader :on, :activated, :test_var
+  attr_reader :on, :test_var
 
   def initialize(args)
     @test_var       = nil
     @on             = false
-    @activated      = false
     @building       = args[:building]
     @sensor         = args[:sensor]
     @appliance      = args[:appliance]
@@ -22,8 +21,7 @@ class SensorController
   def turn_on
     @sensor.turn_on
     @appliance.turn_on
-
-    true
+    @on = true
   end
 
   # Turn to activated:
@@ -44,7 +42,7 @@ class SensorController
     # 1- This should trigger a state analysis
     # 2- Updates the Appliance tree (representation of the apliances)
     # 3- Send new Appliance Tree to Appliance via messages
-    puts "Updated from a sensor..."
+    # puts "Updated from a sensor..."
     # self.state = state << sensor.id
     # print_this
     @test_var = true
