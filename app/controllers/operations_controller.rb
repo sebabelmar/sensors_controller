@@ -1,6 +1,6 @@
 require "observer"
 
-class SensorController
+class OperationsController
   include Observable
   attr_reader :on, :test_var
 

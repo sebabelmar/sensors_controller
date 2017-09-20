@@ -20,7 +20,7 @@ describe 'Appliance' do
         appliance: Appliance
       }
 
-    @sensor_controller = SensorController.new(valid_args)
+    @soperations_controller = OperationsController.new(valid_args)
   end
 
   context ".turn_on" do
@@ -49,7 +49,7 @@ describe 'Appliance' do
     end
 
     xit "notifies the controller about state changes" do
-      expect(@sensor_controller.test_var).to be true
+      expect(@soperations_controller.test_var).to be true
     end
   end
 end

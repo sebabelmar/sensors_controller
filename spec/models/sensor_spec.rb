@@ -27,12 +27,12 @@ describe 'Sensor' do
         appliance: Appliance
       }
 
-    @sensor_controller = SensorController.new(valid_args)
+    @operations_controller = OperationsController.new(valid_args)
   end
 
   context ".turn_on" do
     before do
-      Sensor.turn_on(@building, @sensor_controller )
+      Sensor.turn_on(@building, @operations_controller )
     end
 
     it "initialize instances of it self" do
@@ -56,7 +56,7 @@ describe 'Sensor' do
     end
 
     it "notifies the controller about state changes" do
-      expect(@sensor_controller.test_var).to be true
+      expect(@operations_controller.test_var).to be true
     end
   end
 end
