@@ -71,7 +71,7 @@ valid_args =
     appliance: Appliance
   }
 
-sensor_controller = SensorController.new(valid_args)
+sensor_controller = OperationsController.new(valid_args)
 
 Appliance.turn_on(building)
 Appliance.print_state
