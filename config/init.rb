@@ -1,4 +1,4 @@
-FLOOR_CONFIG =
+FLOORS_CONFIG =
   [
     {
       number: 1,
@@ -16,7 +16,7 @@ FLOOR_CONFIG =
     },
   ]
 
-APPLIANCE_CONFIG = [
+APPLIANCES_CONFIG = [
       {
         type: 'ac',
         location: 'main',

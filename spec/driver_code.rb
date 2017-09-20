@@ -4,8 +4,8 @@ require_relative 'spec_helper'
 building_args =
   {
     category: 'hotel',
-    floors_config: FLOOR_CONFIG,
-    appliances_config: APPLIANCE_CONFIG,
+    floors_config: FLOORS_CONFIG,
+    appliances_config: APPLIANCES_CONFIG,
     restriction: RESTRICTION
   }
 
