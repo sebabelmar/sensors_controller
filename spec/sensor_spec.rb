@@ -10,7 +10,7 @@ Changes in the sensor are send to the any subscribed element.
 describe 'Sensor' do
 
   before :all do
-    floors =
+    floors_config =
       [
         {
           number: 1,
@@ -28,6 +28,33 @@ describe 'Sensor' do
         },
       ]
 
+    appliances_config = [
+          {
+            type: 'ac',
+            location: 'main',
+            qty_per_location: 1,
+            energy_consuption: 10
+          },
+          {
+            type: 'ac',
+            location: 'sub',
+            qty_per_location: 1,
+            energy_consuption: 10
+          },
+          {
+            type: 'light',
+            location: 'main',
+            qty_per_location: 1,
+            energy_consuption: 5
+          },
+          {
+            type: 'light',
+            location: 'sub',
+            qty_per_location: 1,
+            energy_consuption: 5
+          },
+        ]
+
     restriction = {
         level: 'floor',
         main_times: 10 ,
@@ -37,8 +64,8 @@ describe 'Sensor' do
     building_args =
       {
         category: 'hotel',
-        floors: floors,
-        appliances: [],
+        floors_config: floors_config,
+        appliances_config: appliances_config,
         sensors: [],
         restriction: restriction
       }
@@ -61,7 +88,7 @@ describe 'Sensor' do
     end
 
     it "initialize instances of it self" do
-      expect(Sensor.sensors[Sensor.sensors.keys.sample]).to be_an_instance_of Sensor
+      expect(Sensor.all[Sensor.all.keys.sample]).to be_an_instance_of Sensor
     end
 
     it "Class.on is true" do
@@ -69,19 +96,19 @@ describe 'Sensor' do
     end
 
     it "@@sensors hash of Sensor instances as values" do
-      expect(Sensor.sensors.values.map(&:class).uniq.pop).to  eq Sensor
+      expect(Sensor.all.values.map(&:class).uniq.pop).to  eq Sensor
     end
   end
 
   context "#update" do
     before  do
-      @sensor       = Sensor.sensors[Sensor.sensors.keys.sample]
+      @sensor       = Sensor.all[Sensor.all.keys.sample]
       @sensor.armed = true
       @look_up_id   = @sensor.id
     end
 
     it "sensor instance state can be change" do
-      expect(Sensor.sensors[@look_up_id].armed).to be true
+      expect(Sensor.all[@look_up_id].armed).to be true
     end
 
     it "notifies the controller about state changes" do
