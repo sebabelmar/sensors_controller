@@ -1,5 +1,4 @@
 require "observer"
-require "byebug"
 
 class OperationsController
   include Observable
@@ -18,8 +17,7 @@ class OperationsController
 
   # Turn on:
   #   => Create all sensors per floor
-  #   => Create all apps per floor as off
-  #   => Sets levels of energy in use somewhere
+  #   => Create all appliances per floor
   def turn_on
     @sensor.turn_on(@building, self)
     @appliance.turn_on(@building)
@@ -27,24 +25,17 @@ class OperationsController
   end
 
 
-  ############## MESSAGES ##############
   # Receives messages from sensors.
-  # Executes changes on 'state'
   def update(sensor)
-    # 1- This should trigger a state analysis
     analyze(sensor)
   end
 
-  # Emits messages to appliances
+  # Analyses sensor information to dispatch instructions to Appliance
   def analyze(sensor)
     target_floor, target_corridor, target_sub = sensor.id.split('_')
     command = sensor.armed ? 'on' : 'off'
 
-    #  1- turn on || off ligts
-    #  2- perform energy analysis to the floor
-    #  3- turn on || off ac
-    # We could add a check for not repeating opperations
-
+    # Dispatch instructions related to lights appliances
     # Checks for target main or sub and its corresponding configuration
     if (target_sub == 0 && !RESTRICTION[:main_lights_always_on] || target_sub != 0 && !RESTRICTION[:sub_lights_always_on])
       send_instructions_to_observer({id: "#{sensor.id}", command: command, type: 'light', energy_balance: nil})
@@ -52,6 +43,7 @@ class OperationsController
 
     energy_balance = @building.restrictions[target_floor.to_s] - @appliance.energy_report[target_floor.to_s][:current_usage]
 
+    # Dispatch instructions related to air conditioning appliances upon energy analysis
     if (energy_balance < 0)
       send_instructions_to_observer({id: "#{sensor.id}", command: 'off', type: 'ac', energy_balance: energy_balance})
     elsif(energy_balance > 0 && @appliance.energy_report[target_floor.to_s][:saving_mode])
@@ -64,6 +56,7 @@ class OperationsController
     notify_observers(message)
   end
 
+  # Print states using view
   def print_state
     @view.print_state
   end

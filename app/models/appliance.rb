@@ -15,12 +15,14 @@ class Appliance
     @on                = args[:on]
   end
 
+  # Turns lights on an off and evaluates the needs of ac control
   def self.update(message)
     target_floor, target_corridor, target_sub = message[:id].split('_')
     appliance_id = "#{message[:id]}_#{message[:type]}"
 
     if(message[:type] == 'light')
       @@appliances[appliance_id].on = message[:command] == 'on'
+
     elsif(message[:type] == 'ac' && message[:command] == 'off')
       subs_acs_on = @@appliances.values.select { |app|
         app.floor_number.to_s == target_floor && app.location == 'sub' && app.on == true
@@ -38,7 +40,6 @@ class Appliance
       target_applience = subs_acs_off.sample
       target_applience.on = true if message[:energy_balance] >= target_applience.energy_consuption
     end
-
   end
 
   def self.all
@@ -51,7 +52,6 @@ class Appliance
   end
 
   def self.factory(appliances_config)
-
       appliances_config.each do |app|
         type              = app[:type]
         energy_consuption = app[:energy_consuption]

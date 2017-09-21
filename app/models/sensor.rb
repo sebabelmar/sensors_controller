@@ -76,9 +76,4 @@ class Sensor
     @@sensors["#{floor_number}_#{corridor_number}_#{sub_number}"].armed = false
   end
 
-  # Potential CRUD API or it can be turn into a different data structure
-  # def self.find; end
-  # def self.update; end
-  # def self.delete; end
-  # def save; end
 end

@@ -123,6 +123,16 @@ of development.
 Because of time limitation the code presents a lack of validations, it does not
 account for all possible edge cases and the test suite is incomplete. I included
 comments to simplify code review.
+I did not see the need for creating modules for mixins or parent classes. But
+definitely with more time I would have looked for patterns to refactor in that
+direction.
+
+## Diver Code
+I assumed that the controller would get inputs from the sensors as armed or disarmed
+not being responsible of time management (60 seconds).
+The driver code example accounts for turning on 2 sub-corridors lights that would exceed
+the floor energy limit. Therefore, one of the AC units gets turned off. Then one
+of the lights is set to off again liberating energy for the AC unit to go back to work.
 
 
 ## Run and Test
