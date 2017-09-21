@@ -1,4 +1,5 @@
 require "observer"
+require "byebug"
 
 class OperationsController
   include Observable
@@ -24,7 +25,6 @@ class OperationsController
     @on = true
   end
 
-  ############## State Analisis     ####  
 
   ############## MESSAGES ##############
   # Receives messages from sensors.
@@ -37,16 +37,29 @@ class OperationsController
   # Emits messages to appliances
   def analyze(sensor)
     target_floor, target_corridor, target_sub = sensor.id.split('_')
+    command = sensor.armed ? 'on' : 'off'
 
-    # if (target_sub != 0 && RESTRICTION[main_lights_always_on])
+    #  1- turn on || off ligts
+    #  2- perform energy analysis to the floor
+    #  3- turn on || off ac
+    # We could add a check for not repeating opperations
 
-    puts "2- Analyzing and notifying from controller to Appliance"
-    send_instructions_to_observer({id: "#{sensor.id}_light", command: 'on'}) # this will contain the aps tree
+    # Checks for target main or sub and its corresponding configuration
+    if (target_sub == 0 && !RESTRICTION[:main_lights_always_on] || target_sub != 0 && !RESTRICTION[:sub_lights_always_on])
+      send_instructions_to_observer({id: "#{sensor.id}", command: command, type: 'light', energy_balance: nil})
+    end
+
+    energy_balance = @building.restrictions[target_floor.to_s] - @appliance.energy_report[target_floor.to_s][:current_usage]
+
+    if (energy_balance < 0)
+      send_instructions_to_observer({id: "#{sensor.id}", command: 'off', type: 'ac', energy_balance: energy_balance})
+    elsif(energy_balance > 0 && @appliance.energy_report[target_floor.to_s][:saving_mode])
+      send_instructions_to_observer({id: "#{sensor.id}", command: 'on', type: 'ac', energy_balance: energy_balance})
+    end
   end
 
   def send_instructions_to_observer(message)
     changed
-    puts "3- sending instructions"
     notify_observers(message)
   end
 
