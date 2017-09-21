@@ -15,17 +15,20 @@ class Appliance
     @on                = args[:on]
   end
 
-  def self.update(banana)
-    puts '--- APPLIANCE GETTING MESSAGE AS CLASS ---'
+  def self.update(message)
+    puts "4- Finding appliance and updating"
+    @@appliances[message[:id]].on = true
+    print_state
   end
 
   def self.all
     @@appliances
-  end
+  end 
 
   def self.turn_on(building)
     @@building  = building
     factory(@@building.appliances_config)
+    print_state
   end
 
   def self.factory(appliances_config)
@@ -80,7 +83,7 @@ class Appliance
         puts "  AC: #{@@appliances["#{floor[:number]}_#{main[:number]}_0_ac"].on ? 'ON' : 'OFF'}"
 
         main[:sub_corridors].each do |sub|
-          puts "    Main corridor #{sub[:number]}"
+          puts "    Sub corridor #{sub[:number]}"
           puts "      Light: #{@@appliances["#{floor[:number]}_#{main[:number]}_#{sub[:number]}_light"].on ? 'ON' : 'OFF'}"
           puts "      AC: #{@@appliances["#{floor[:number]}_#{main[:number]}_#{sub[:number]}_ac"].on ? 'ON' : 'OFF'}"
         end
