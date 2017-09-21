@@ -17,13 +17,14 @@ class Appliance
 
   def self.update(message)
     puts "4- Finding appliance and updating"
+    p message
     @@appliances[message[:id]].on = true
     print_state
   end
 
   def self.all
     @@appliances
-  end 
+  end
 
   def self.turn_on(building)
     @@building  = building
@@ -102,6 +103,10 @@ class Appliance
     end
 
     report_hash
+  end
+
+  def self.find(type, floor_number, corridor_number, sub_number=0)
+    @@appliances["#{floor_number}_#{corridor_number}_#{sub_number}_#{type.downcase}"]
   end
 
 end
