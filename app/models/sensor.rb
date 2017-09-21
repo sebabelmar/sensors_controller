@@ -24,7 +24,7 @@ class Sensor
   end
 
 
-  # ####### Class Methods ##########
+  # ####### Class Methods & Vars ##########
   @@controller  = nil
   @@sensors     = {}
 
@@ -32,10 +32,6 @@ class Sensor
     @@building   = building
     @@controller = controller
     factory
-  end
-
-  def self.all
-    @@sensors
   end
 
   # This can be optimize with a different query to floor/sensors
