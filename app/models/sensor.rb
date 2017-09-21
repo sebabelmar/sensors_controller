@@ -67,6 +67,20 @@ class Sensor
       })
   end
 
+  def self.all
+    @@sensors
+  end
+
+  # I would make this method more flexible
+  def self.arm(floor_number, corridor_number, sub_number=0)
+    @@sensors["#{floor_number}_#{corridor_number}_#{sub_number}"].armed = true
+  end
+
+  def self.disarm(floor_number, corridor_number, sub_number=0)
+    @@sensors["#{floor_number}_#{corridor_number}_#{sub_number}"].armed = false
+  end
+
+  # Potential CRUD API or it can be turn into a different data structure
   # def self.find; end
   # def self.update; end
   # def self.delete; end
