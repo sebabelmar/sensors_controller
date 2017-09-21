@@ -54,7 +54,7 @@ class Building
             end
           end
 
-          restrictions[floor[:number]] = limit
+          restrictions[floor[:number].to_s] = limit
       end
     end
 end
