@@ -25,7 +25,7 @@ describe Building do
     end
 
     it "returns 40" do
-      expect(@building.restrictions[1]).to eq(40)
+      expect(@building.restrictions['1']).to eq(40)
     end
 
     xit "can be change" do
