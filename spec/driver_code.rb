@@ -19,4 +19,11 @@ valid_args =
   }
 
 OperationsController.new(valid_args).turn_on
+
+Appliance.print_state
 Sensor.arm(1,1,2)
+Appliance.print_state
+Sensor.arm(1,1,1)
+Appliance.print_state
+Sensor.disarm(1,1,1)
+Appliance.print_state
