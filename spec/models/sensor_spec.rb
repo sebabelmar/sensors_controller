@@ -18,23 +18,20 @@ describe 'Sensor' do
         restriction: RESTRICTION
       }
 
-    @building = Building.new(building_args)
+    building = Building.new(building_args)
 
     valid_args =
       {
-        building: @building,
+        building: building,
         sensor: Sensor,
         appliance: Appliance
       }
 
     @operations_controller = OperationsController.new(valid_args)
+    @operations_controller.turn_on
   end
 
   context ".turn_on" do
-    before do
-      Sensor.turn_on(@building, @operations_controller )
-    end
-
     it "initialize instances of it self" do
       expect(Sensor.all[Sensor.all.keys.sample]).to be_an_instance_of Sensor
     end
@@ -45,18 +42,10 @@ describe 'Sensor' do
   end
 
   context "#update" do
-    before  do
-      @sensor       = Sensor.all[Sensor.all.keys.sample]
-      @sensor.armed = true
-      @look_up_id   = @sensor.id
-    end
-
-    it "sensor instance state can be change" do
-      expect(Sensor.all[@look_up_id].armed).to be true
-    end
-
-    it "notifies the controller about state changes" do
-      expect(@operations_controller.test_var).to be true
+    it "turns appliance on" do
+      Sensor.arm(1,1,2)
+      
+      expect(Appliance.find('light', 1, 1, 2))
     end
   end
 end
