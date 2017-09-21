@@ -46,5 +46,7 @@ APPLIANCES_CONFIG = [
 RESTRICTION = {
     level: 'floor',
     main_times: 10 ,
-    sub_times: 15
+    sub_times: 15,
+    main_lights_always_on: true,
+    sub_lights_always_on: false,
   }
