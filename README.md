@@ -108,6 +108,42 @@ Floor 2
         AC : ON
 ```
 
+## Description of the Solution Presented
+I wanted to solve this problem by creating a system that responds to 3 simple
+configuration objects allowing for flexibility.
+One of my objectives was to use the MVC Patter as system architecture and the
+Observable Patter for system communication.
+My approach was to create the least amount of models as possible. One controller
+and one view.
+
+## Challenges
+Due to the the relations between building structure, sensors and appliances their
+individual and collective logic it was hard to keep the code at a minimum level
+of development.
+Because of time limitation the code presents a lack of validations, it does not
+account for all possible edge cases and the test suite is incomplete. I included
+comments to simplify code review.
+
+
+## Run and Test
+### Depencies
+* Ruby Computer Language
+* Ruby Gem Bundle
+
+On root folder:
+`> bunble install`
+
+Run test suite:
+`> rspec`
+
+Run test driver code:
+`> ruby spec/driver_code.rb`
+
+## File Structure
+I organized the files in a Ruby on Rails fashion.  
+![alt text](docs/file_structure.png)
+
+
 ## Initial configuration
 The created system takes this constants start and create model instances.
 
