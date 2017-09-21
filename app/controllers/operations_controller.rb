@@ -24,9 +24,7 @@ class OperationsController
     @on = true
   end
 
-  ############## State Analisis     ####
-
-  ############## Appliance Analisis ####
+  ############## State Analisis     ####  
 
   ############## MESSAGES ##############
   # Receives messages from sensors.
@@ -40,16 +38,16 @@ class OperationsController
   def analyze(sensor)
     target_floor, target_corridor, target_sub = sensor.id.split('_')
 
-    if (target_sub != 0 && RESTRICTION[main_lights_always_on])
+    # if (target_sub != 0 && RESTRICTION[main_lights_always_on])
 
     puts "2- Analyzing and notifying from controller to Appliance"
-    send_instructions_to_observer({id: id, command: command}) # this will contain the aps tree
+    send_instructions_to_observer({id: "#{sensor.id}_light", command: 'on'}) # this will contain the aps tree
   end
 
   def send_instructions_to_observer(message)
     changed
     puts "3- sending instructions"
-    notify_observers({id: id, command: command}) # this will contain the aps tree
+    notify_observers(message)
   end
 
 end
