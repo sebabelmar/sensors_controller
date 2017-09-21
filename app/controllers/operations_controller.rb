@@ -19,17 +19,10 @@ class OperationsController
   #   => Create all apps per floor as off
   #   => Sets levels of energy in use somewhere
   def turn_on
-    @sensor.turn_on
-    @appliance.turn_on
+    @sensor.turn_on(@building, self)
+    @appliance.turn_on(@building)
     @on = true
   end
-
-  # Turn to activated:
-  #   => Set all main light on
-  #   => Set all sub lights to motion
-  #   => Set all AC to on
-  #   => Runs energy analysis
-
 
   ############## State Analisis     ####
 
@@ -40,20 +33,23 @@ class OperationsController
   # Executes changes on 'state'
   def update(sensor)
     # 1- This should trigger a state analysis
-    # 2- Updates the Appliance tree (representation of the apliances)
-    # 3- Send new Appliance Tree to Appliance via messages
-    # puts "Updated from a sensor..."
-    # self.state = state << sensor.id
-    # print_this
-    @test_var = true
+    analyze(sensor)
   end
 
   # Emits messages to appliances
-  def state=(state)
-    changed
-    @state = state
-    puts "State Updated notify appliances.... bip bip"
+  def analyze(sensor)
+    target_floor, target_corridor, target_sub = sensor.id.split('_')
 
-    notify_observers(self) # this will contain the aps tree
+    if (target_sub != 0 && RESTRICTION[main_lights_always_on])
+
+    puts "2- Analyzing and notifying from controller to Appliance"
+    send_instructions_to_observer({id: id, command: command}) # this will contain the aps tree
   end
+
+  def send_instructions_to_observer(message)
+    changed
+    puts "3- sending instructions"
+    notify_observers({id: id, command: command}) # this will contain the aps tree
+  end
+
 end
