@@ -2,7 +2,7 @@ class Appliance
 
   @@appliances = {}
 
-  attr_reader :floor_number, :energy_consuption
+  attr_reader :floor_number, :energy_consuption, :type, :location
   attr_accessor :on
 
   def initialize(args)
@@ -16,10 +16,29 @@ class Appliance
   end
 
   def self.update(message)
-    puts "4- Finding appliance and updating"
-    p message
-    @@appliances[message[:id]].on = true
-    print_state
+    target_floor, target_corridor, target_sub = message[:id].split('_')
+    appliance_id = "#{message[:id]}_#{message[:type]}"
+
+    if(message[:type] == 'light')
+      @@appliances[appliance_id].on = message[:command] == 'on'
+    elsif(message[:type] == 'ac' && message[:command] == 'off')
+      subs_acs_on = @@appliances.values.select { |app|
+        app.floor_number.to_s == target_floor && app.location == 'sub' && app.on == true
+      }
+
+      target_applience = subs_acs_on.sample
+      target_applience.on = false
+    elsif(message[:type] == 'ac' && message[:command] == 'on')
+      subs_acs_off = @@appliances.values.select { |app|
+        app.floor_number == target_floor && app.location == 'sub' && app.on == false
+      }
+
+      # Im not keeping track of lates turned off, therefore turn sample
+      # on. If energy balance is higer than ac needs.
+      target_applience = subs_acs_off.sample
+      target_applience.on = true if message[:energy_balance] >= target_applience.energy_consuption
+    end
+
   end
 
   def self.all
@@ -29,7 +48,6 @@ class Appliance
   def self.turn_on(building)
     @@building  = building
     factory(@@building.appliances_config)
-    print_state
   end
 
   def self.factory(appliances_config)
@@ -99,7 +117,9 @@ class Appliance
     apps          = @@appliances.values
 
     floors_array.each do |floor|
-      report_hash[floor.to_s] =  apps.select {|app| app.floor_number == floor && app.on}.map(&:energy_consuption).reduce(:+)
+      saving_mode   = apps.select {|app| app.floor_number == floor && app.type == 'ac' && !app.on}.length == 0
+      current_usage = apps.select {|app| app.floor_number == floor && app.on}.map(&:energy_consuption).reduce(:+)
+      report_hash[floor.to_s] = {current_usage: current_usage, saving_mode: saving_mode}
     end
 
     report_hash
