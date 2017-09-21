@@ -11,6 +11,7 @@ class OperationsController
     @building       = args[:building]
     @sensor         = args[:sensor]
     @appliance      = args[:appliance]
+    @view           = args[:view]
 
     add_observer(@appliance)
   end
@@ -61,6 +62,10 @@ class OperationsController
   def send_instructions_to_observer(message)
     changed
     notify_observers(message)
+  end
+
+  def print_state
+    @view.print_state
   end
 
 end
