@@ -13,16 +13,10 @@ building = Building.new(building_args)
 
 valid_args =
   {
-    building: @building,
+    building: building,
     sensor: Sensor,
     appliance: Appliance
   }
 
-operations_controller = OperationsController.new(valid_args)
-
-Appliance.turn_on(building)
-Appliance.print_state
-Appliance.energy_report
-
-Sensor.turn_on(building, operations_controller)
-Sensor.all
+OperationsController.new(valid_args).turn_on
+Sensor.arm(1,1,2)
