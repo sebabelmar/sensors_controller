@@ -1,7 +1,37 @@
 require "observer"
+# Description:
+#   This class is a sensor factory where its instances dispatches state (are/disarm) reports
+#   to a subscriber (OperationsController).
+#   Its responsability is to create instances upon floor configuration and subscribe the controller to them.
+#   And maintain a collection of instances in compliance with the provided configuration.
+#   Therefore this class should not be instantiate manually.
+
+# Dependencies: n/a
+
+# Attributes:
+#   args= {
+#     id: "<floor_number>_<main_corridor_number>_<sub_corridor_or_zero>",
+#     floor_number: <number>,
+#     location: <string> 'main' || 'sub',
+#     armed: <boolean>,
+#    }
+
+# External API:
+#         class:
+#           .turn_on(<building instance>, <controller.instance>)  => Allocates arguments to class variables
+#                                                                 => Executes factory method
+#           .all      => returns a collection of sensors created upon Bulding#floors_config; @@sensors
+#           .arm(floor_number, corridor_number, sub_number=0)      => finds an element of the sensors collection and changes attr armed to true
+#           .disarm(floor_number, corridor_number, sub_number=0)   => finds an element of the sensors collection and changes attr armed to false
+#         instance:
+#           .armed => changes attr armed and triggers notification to subscriber
 
 class Sensor
   include Observable
+
+  @@controller  = nil
+  @@sensors     = {}
+  @@turned_on   = false
 
   attr_reader :id, :armed, :floor_number, :location
 
@@ -23,19 +53,18 @@ class Sensor
     notify_observers(self)
   end
 
-
-  # ####### Class Methods & Vars ##########
-  @@controller  = nil
-  @@sensors     = {}
-
   def self.turn_on(building, controller)
+    unless(building.class == Building && controller.class == OperationsController)
+      raise(ArgumentError, "Please make sure that your are instatiating this class with instances of the appropiate classes.")
+    end
+
     @@building   = building
     @@controller = controller
-    factory
+    factory unless @@turned_on
+    @@turned_on   = true
   end
 
-  # This can be optimize with a different query to floor/sensors
-  # colleciton. Different data structures.
+  # Executes initialization upon building floor configuration.
   def self.factory
 
     # Assuming 1 sensor per location
@@ -53,7 +82,8 @@ class Sensor
     end
   end
 
-  # CRUD move to module if possible
+  # Creates instances of itself and it organize it in a Hash were the keys are the elements ids
+  # and values are instances of this same class.
   def self.create(location, floor_number, main_number, sub_number=0)
     # Add validation like unique ids.
 
@@ -63,15 +93,18 @@ class Sensor
       })
   end
 
+  # Returns collection
   def self.all
     @@sensors
   end
 
   # I would make this method more flexible
+  # Finds an element in the main collection and turns its state into armed
   def self.arm(floor_number, corridor_number, sub_number=0)
     @@sensors["#{floor_number}_#{corridor_number}_#{sub_number}"].armed = true
   end
 
+  # Finds an element in the main collection and turns its state into disam
   def self.disarm(floor_number, corridor_number, sub_number=0)
     @@sensors["#{floor_number}_#{corridor_number}_#{sub_number}"].armed = false
   end

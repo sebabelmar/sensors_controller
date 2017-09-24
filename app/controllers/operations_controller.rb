@@ -1,11 +1,32 @@
 require "observer"
+# Description:
+#   This class is the operations controller. It recieves intructions to turn on
+#   appliances and sensors given a Building configuration.
+#   It recieves messages of sensors state changes and notifies Application about this
+#   changes. It process information in order to send the correct message to Appliance.
+
+# Dependencies: Bulding#instance, Sensor, Appliance, View.
+
+# Attributes:
+#   args= {
+#     on: <boolean>,
+#     building: <Building#instance>,
+#     sensor: <Class>,
+#     appliance: <Class>,
+#     view: <Class>,
+#   }
+
+# External API:
+#         instance:
+#           #on           => Attribute accesor to change instance state.
+#           #print_state  => Prints state report via View.
+
 
 class OperationsController
   include Observable
-  attr_reader :on, :test_var
+  attr_reader :on
 
   def initialize(args)
-    @test_var       = nil
     @on             = false
     @building       = args[:building]
     @sensor         = args[:sensor]
@@ -15,9 +36,10 @@ class OperationsController
     add_observer(@appliance)
   end
 
-  # Turn on:
+  # Turns on:
   #   => Create all sensors per floor
   #   => Create all appliances per floor
+  #   => Flags the controller as on
   def turn_on
     @sensor.turn_on(@building, self)
     @appliance.turn_on(@building)
@@ -51,6 +73,8 @@ class OperationsController
     end
   end
 
+  # Notifies Appliance using a previously formated message
+  # Message = {id: <string>, command: <on || off> , type: <ligt || ac>, energy_balance: <number>}
   def send_instructions_to_observer(message)
     changed
     notify_observers(message)

@@ -1,3 +1,19 @@
+require "observer"
+# Description:
+#   This class serves as printer for state report. Its a dependency for OperationController.
+
+# Dependencies: Bulding#instance, Sensor, Appliance, View.
+
+# Attributes:
+#   args= {
+#     building: <Building#instance>,
+#     appliance: <Class>,
+#   }
+
+# External API:
+#         instance:
+#           #print_state  => Prints state report via View.
+
 class OperationsView
 
   def initialize(building, appliance)

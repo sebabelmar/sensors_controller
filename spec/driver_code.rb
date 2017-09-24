@@ -30,3 +30,5 @@ Sensor.arm(1,1,1)
 oc.print_state
 Sensor.disarm(1,1,1)
 oc.print_state
+
+p Appliance.energy_report
