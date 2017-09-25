@@ -135,6 +135,10 @@ This project was created using GIT as version control and it has two branches:
 => master
 => develop
 
+## TODO:
+* Add test coverage to all models, controller and view
+* Remove all hard-coded values like "on", "off", "lights" and turn them into constants
+
 
 ## Run and Test
 ### Depencies
