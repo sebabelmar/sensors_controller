@@ -1,4 +1,4 @@
-# Description:
+  # Description:
 #   This class is an appliance factory
 #   Its instances recieves instrunctions from the controller. Via the Class.
 #   OperationsController gets this class as an observer.
@@ -74,7 +74,7 @@ class Appliance
     elsif(message[:type] == 'ac' && message[:command] == 'off')
       # Finds an AC that is on in an specific floor and location
       subs_acs_on = @@appliances.values.select { |app|
-        app.floor_number.to_s == target_floor && app.location == 'sub' && app.on == true
+        app.floor_number.to_s == target_floor && app.location == 'sub' && app.on == true && app.type == 'ac'
       }
 
       # In the case of finding more thate one takes a sample and turns off.
@@ -83,7 +83,7 @@ class Appliance
     elsif(message[:type] == 'ac' && message[:command] == 'on')
       # Finds an AC that is off in an specific floor and location
       subs_acs_off = @@appliances.values.select { |app|
-        app.floor_number == target_floor && app.location == 'sub' && app.on == false
+        app.floor_number.to_s  == target_floor && app.location == 'sub' && app.on == false && app.type == 'ac'
       }
 
       # In the case of finding more that one takes a sample and turns on checking
@@ -153,7 +153,7 @@ class Appliance
     apps          = @@appliances.values
 
     floors_array.each do |floor|
-      saving_mode   = apps.select {|app| app.floor_number == floor && app.type == 'ac' && !app.on}.length == 0
+      saving_mode   = apps.select {|app| app.floor_number == floor && app.type == 'ac' && app.on == false}.length != 0
       current_usage = apps.select {|app| app.floor_number == floor && app.on}.map(&:energy_consuption).reduce(:+)
       report_hash[floor.to_s] = {current_usage: current_usage, saving_mode: saving_mode}
     end
