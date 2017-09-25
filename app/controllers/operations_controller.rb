@@ -18,8 +18,9 @@ require "observer"
 
 # External API:
 #         instance:
-#           #on           => Attribute accesor to change instance state.
-#           #print_state  => Prints state report via View.
+#           #on             => Attribute accesor to change instance state.
+#           #print_state    => Prints state report via View.
+#           #inputs_runner  => Runs input console prompt
 
 
 class OperationsController
@@ -65,6 +66,7 @@ class OperationsController
       send_instructions_to_observer({id: "#{sensor.id}", command: command, type: 'light', energy_balance: nil})
     end
 
+    # Gets enegy report from Appliance and performs calculations
     energy_report = @appliance.energy_report[target_floor.to_s]
     energy_balance = @building.restrictions[target_floor.to_s] - energy_report[:current_usage]
 
@@ -98,6 +100,7 @@ class OperationsController
     end
   end
 
+  # This method runs the program but it can be refactored and moved to view.
   def inputs_runner
     loop do
       puts 'Enter commands: STATUS, EXIT, ARM, DISARM'
@@ -112,8 +115,13 @@ class OperationsController
         puts 'Enter Sub Corridor number: '
         sub_number = gets.chomp.to_i
 
-        sensor_input('arm', floor_number, corridor_number, sub_number)
-        print_state
+        begin
+          sensor_input('arm', floor_number, corridor_number, sub_number)
+        rescue ArgumentError => a
+          puts a.inspect
+        else
+          print_state
+        end
       elsif command == 'disarm'|| command == 'd'
         puts 'Enter floor number: '
         floor_number = gets.chomp.to_i
@@ -122,8 +130,13 @@ class OperationsController
         puts 'Enter Sub Corridor number: '
         sub_number = gets.chomp.to_i
 
-        sensor_input('disarm', floor_number, corridor_number, sub_number)
-        print_state
+        begin
+          sensor_input('disarm', floor_number, corridor_number, sub_number)
+        rescue ArgumentError
+          error.inspect
+        else
+          print_state
+        end
       elsif command == 'exit'
         puts 'Bye bye!!'
         break

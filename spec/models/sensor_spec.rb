@@ -22,6 +22,7 @@ describe 'Sensor' do
 
     operations_controller = OperationsController.new(valid_args)
 
+    operations_controller.turn_on
     Sensor.turn_on(building, operations_controller)
   end
 
@@ -31,7 +32,7 @@ describe 'Sensor' do
     end
 
     it "@@sensors hash of Sensor instances as values" do
-      expect(Sensor.all.values.map(&:class).uniq.pop).to  eq Sensor
+      expect(Sensor.all.values.map(&:class).uniq.pop).to eq Sensor
     end
 
     it "faulty parameters raise ArgumentError" do
@@ -41,9 +42,9 @@ describe 'Sensor' do
 
   context "#update" do
     it "turns appliance on" do
-      Sensor.arm(1,1,2)
-
-      expect(Appliance.find('light', 1, 1, 2))
+      Sensor.arm(1,1,1)
+      
+      expect(Appliance.find('light', 1, 1, 1).on).to be true
     end
   end
 end

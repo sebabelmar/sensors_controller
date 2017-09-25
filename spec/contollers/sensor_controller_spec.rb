@@ -34,10 +34,4 @@ describe OperationsController do
     end
   end
 
-  context "#turn_on" do
-   xit "should return true" do
-      expect(@operations_controller.turn_on).to be true
-    end
-  end
-
 end

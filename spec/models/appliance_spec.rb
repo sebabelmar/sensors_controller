@@ -37,19 +37,15 @@ describe 'Appliance' do
     end
   end
 
-  context "#update" do
-    before  do
-      @sensor       = Appliance.all["1_1_1"]
-      @sensor.armed = true
-      @look_up_id   = @sensor.id + "_light"
+  context ".find" do
+    it "finds an instance of Apliance in collection" do
+      expect(Appliance.find('light', 1, 1, 1)).to be_an_instance_of Appliance
     end
+  end
 
-    xit "sensor instance state can be change" do
-      expect(Appliance.all[@look_up_id].armed).to be true
-    end
-
-    xit "notifies the controller about state changes" do
-      expect(@soperations_controller.test_var).to be true
+  context ".energy_report" do
+    it "its a Hash" do
+      expect(Appliance.energy_report).to be_an_instance_of Hash
     end
   end
 end
