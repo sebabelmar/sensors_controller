@@ -24,7 +24,7 @@ require "observer"
 #           .arm(floor_number, corridor_number, sub_number=0)      => finds an element of the sensors collection and changes attr armed to true
 #           .disarm(floor_number, corridor_number, sub_number=0)   => finds an element of the sensors collection and changes attr armed to false
 #         instance:
-#           .armed => changes attr armed and triggers notification to subscriber
+#           .armed            => changes attr armed and triggers notification to subscriber
 
 class Sensor
   include Observable
@@ -48,8 +48,7 @@ class Sensor
   # Observer is notified on changes (SensorController)
   def armed=(armed_update)
     changed
-    @armed      = armed_update
-    @last_armed = Time.now
+    @armed = armed_update
     notify_observers(self)
   end
 
@@ -101,12 +100,23 @@ class Sensor
   # I would make this method more flexible
   # Finds an element in the main collection and turns its state into armed
   def self.arm(floor_number, corridor_number, sub_number=0)
-    @@sensors["#{floor_number}_#{corridor_number}_#{sub_number}"].armed = true
+    find_update_armed(true, floor_number, corridor_number, sub_number)
   end
 
   # Finds an element in the main collection and turns its state into disam
   def self.disarm(floor_number, corridor_number, sub_number=0)
-    @@sensors["#{floor_number}_#{corridor_number}_#{sub_number}"].armed = false
+    find_update_armed(false, floor_number, corridor_number, sub_number)
   end
 
+  # This method could be a generic update.
+  # Finds an element and changes its state after validation
+  def self.find_update_armed(arm_value, floor_number, corridor_number, sub_number=0)
+    target_sensor = @@sensors["#{floor_number}_#{corridor_number}_#{sub_number}"]
+
+    if (target_sensor == nil)
+      raise(ArgumentError, "Sensor not found, please check floor, corridor and sub corridor data.")
+    else
+      target_sensor.armed = arm_value
+    end
+  end
 end
