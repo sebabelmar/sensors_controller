@@ -111,8 +111,8 @@ Floor 2
 ## Description of the Solution Presented
 I wanted to solve this problem by creating a system that responds to 3 simple
 configuration objects allowing for flexibility.
-One of my objectives was to use the MVC Patter as system architecture and the
-Observable Patter for system communication.
+One of my objectives was to use the MVC Patter as system architecture, the
+Observable Patter for system communication and Factory Pattern for models creation.
 My approach was to create the least amount of models as possible. One controller
 and one view.
 
@@ -120,19 +120,20 @@ and one view.
 Due to the the relations between building structure, sensors and appliances their
 individual and collective logic it was hard to keep the code at a minimum level
 of development.
-Because of time limitation the code presents a lack of validations, it does not
-account for all possible edge cases and the test suite is incomplete. I included
-comments to simplify code review.
+Because of time limitation the code presents a lack of test and TDD procedures.
 I did not see the need for creating modules for mixins or parent classes. But
 definitely with more time I would have looked for patterns to refactor in that
 direction.
+There are a number of ErrorHandling, Raises and Validation that this system could implement.
 
-## Diver Code
+## Other Assumptions
 I assumed that the controller would get inputs from the sensors as armed or disarmed
 not being responsible of time management (60 seconds).
-The driver code example accounts for turning on 2 sub-corridors lights that would exceed
-the floor energy limit. Therefore, one of the AC units gets turned off. Then one
-of the lights is set to off again liberating energy for the AC unit to go back to work.
+
+## Version Control
+This project was created using GIT as version control and it has two branches:
+=> master
+=> develop
 
 
 ## Run and Test
@@ -146,8 +147,8 @@ On root folder:
 Run test suite:
 `> rspec`
 
-Run test driver code:
-`> ruby spec/driver_code.rb`
+Runner to interact with the system:
+`> ruby run.rb`
 
 ## File Structure
 I organized the files in a Ruby on Rails fashion.  
@@ -215,6 +216,7 @@ RESTRICTION = {
 ```
 
 ## Objects in System
+Each file on the app folder has a description and comments to simplify code review.
 
 ### Models
 Appliance
@@ -227,6 +229,7 @@ OperationController
 ### View
 OperationView
 
+## Model Samples
 Appliance.all =>
 ```ruby
 {
